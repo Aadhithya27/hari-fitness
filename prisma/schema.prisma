@@ -1,0 +1,136 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  TRAINER
+  CLIENT
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  role          Role           @default(CLIENT)
+  image         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  // Relations
+  profile       ClientProfile?
+  sentMessages  Message[]      @relation("SentMessages")
+  rcvdMessages  Message[]      @relation("ReceivedMessages")
+  notifications Notification[]
+}
+
+model ClientProfile {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  age           Int
+  gender        String
+  height        Float    // in cm
+  currentWeight Float    // in kg
+  targetWeight  Float    // in kg
+  activityLevel String
+  medicalNotes  String?
+  habits        String?  // comma separated or JSON string
+  
+  // Gamification fields
+  xp            Int      @default(0)
+  level         Int      @default(1)
+  streak        Int      @default(0)
+  dailyStreak   Int      @default(0)
+  lastActiveAt  DateTime @default(now())
+  
+  // Custom tracking relations
+  workoutPlans  WorkoutPlan[]
+  dietPlans     DietPlan[]
+  measurements  Measurement[]
+  achievements  Achievement[]
+}
+
+model WorkoutPlan {
+  id           String        @id @default(uuid())
+  profileId    String
+  profile      ClientProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  exercises    String        // JSON string storing structure of exercises: sets, reps, weight, videoUrl, restTime
+  completedDays String       // JSON string storing calendar check-in dates
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+}
+
+model DietPlan {
+  id             String        @id @default(uuid())
+  profileId      String
+  profile        ClientProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title          String
+  targetCalories Int
+  targetProtein  Int           // in g
+  targetCarbs    Int           // in g
+  targetFat      Int           // in g
+  meals          String        // JSON string storing breakfast, lunch, dinner, snacks, water targets
+  isActive       Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+}
+
+model Measurement {
+  id            String        @id @default(uuid())
+  profileId     String
+  profile       ClientProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  weight        Float
+  bodyFat       Float?
+  bmi           Float?
+  chest         Float?
+  waist         Float?
+  hip           Float?
+  biceps        Float?
+  thigh         Float?
+  shoulders     Float?
+  neck          Float?
+  recordedAt    DateTime      @default(now())
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String
+  mediaUrl   String?  // For images, PDFs, voice recordings, etc.
+  fileType   String?  // PDF, Image, Voice, etc.
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   // WORKOUT, MEAL, MESSAGE, ACHIEVEMENT, STREAK
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Achievement {
+  id          String        @id @default(uuid())
+  profileId   String
+  profile     ClientProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  badgeCode   String        // Unique code to render specific badge icons
+  xpAwarded   Int
+  unlockedAt  DateTime      @default(now())
+}
