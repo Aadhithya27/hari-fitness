@@ -95,7 +95,7 @@ export const metadata: Metadata = {
     creator: "@harifitness",
   },
   verification: {
-    google: "google-site-verification-token",
+    google: "7xkxGCTUvAybChvZQXcbgUeQW5jklJ3Ji9Ib7yGWv_4",
   },
   category: "Health & Fitness",
 };
