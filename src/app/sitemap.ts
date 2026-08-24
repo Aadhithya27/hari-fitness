@@ -22,17 +22,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/dashboard/client`,
-      lastModified,
-      changeFrequency: 'daily',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/dashboard/trainer`,
-      lastModified,
-      changeFrequency: 'daily',
-      priority: 0.5,
-    },
   ];
 }
+
