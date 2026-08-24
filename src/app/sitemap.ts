@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://harifitness.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hari-fitness.vercel.app';
   const lastModified = new Date();
 
   return [

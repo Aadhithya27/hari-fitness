@@ -1,7 +1,7 @@
 import React from "react";
 
 export function JsonLdSchema() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://harifitness.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hari-fitness.vercel.app";
 
   // 1. Business & Organization Schema
   const organizationSchema = {

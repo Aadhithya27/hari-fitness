@@ -25,7 +25,7 @@ const orbitron = Orbitron({
   display: "swap",
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://harifitness.com";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hari-fitness.vercel.app";
 
 export const viewport: Viewport = {
   themeColor: "#FF1E1E",

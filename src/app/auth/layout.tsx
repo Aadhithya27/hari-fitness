@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Client & Trainer Authentication | HARI FITNESS",
     description: "Sign in to access your customized personal training workspace, nutrition logs, and workout calendars.",
-    url: "https://harifitness.com/auth",
+    url: "https://hari-fitness.vercel.app/auth",
   },
 };
 
